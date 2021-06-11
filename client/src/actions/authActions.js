@@ -10,7 +10,7 @@ import {  REGISTER_SUCCESS,
 import axios from  'axios'
 
 export const registerUser = user => dispatch => {
-    axios.post('/register', user )
+    axios.post('/users/register', user )
     .then(res=> dispatch({
         type : REGISTER_SUCCESS,
         payload: res.data
@@ -19,6 +19,20 @@ export const registerUser = user => dispatch => {
 .catch((err ) => 
 dispatch({
     type: REGISTER_FAIL ,
+    payload : err.response.data.msg,
+}));
+};
+
+export const loginUser = user => dispatch => {
+    axios.post('/users/login', user )
+    .then(res=> dispatch({
+        type : LOGIN_SUCCESS,
+        payload: res.data
+    }))
+
+.catch((err ) => 
+dispatch({
+    type: LOGIN_FAIL ,
     payload : err.response.data.msg,
 }));
 };

@@ -1,12 +1,13 @@
 import React, {useState} from 'react'
 import axios from 'axios';
 import {useDispatch} from 'react-redux'
-import { registerUser} from "../actions/authActions"
+import { registerUser,loginUser} from "../actions/authActions"
+
 
 
 
 export default function Login({setIsLogin}) {
-    const [user, setUser] = useState({name: '',email: '',password: '' })
+    const [user, setUser] = useState({username: '',email: '',password: '' })
     const dispatch = useDispatch()
     const [err, setErr] = useState('')
 
@@ -14,6 +15,10 @@ export default function Login({setIsLogin}) {
         const {name, value} = e.target;
         setUser({...user, [name]:value})
         setErr('')
+    }
+    const handleSubmitLogin=(e)=>{
+        e.preventDefault()
+        dispatch(loginUser(user))
     }
 
     const registerSubmit = async e =>{
@@ -53,12 +58,17 @@ export default function Login({setIsLogin}) {
         visibility: onLogin ? "visible" : "hidden",
         opacity: onLogin ? 1 : 0
     }
+    const handleRegisterSubmit=(e)=>{
+        e.preventDefault()
+        dispatch(registerUser(user))
+        setOnLogin(false)
+    }
 
     return (
        <section className="login-page">
            <div className="login create-note">
                 <h2>Login</h2>
-                <form onSubmit={loginSubmit}>
+                <form >
                     <input type="email" name="email" id="login-email"
                     placeholder="Email" required value={user.email}
                     onChange={onChangeInput} />
@@ -68,7 +78,7 @@ export default function Login({setIsLogin}) {
                     autoComplete="true"
                     onChange={onChangeInput} />
 
-                    <button type="submit">Login</button>
+                    <button type="submit" onClick={handleSubmitLogin}>Login</button>
                     <p>You don't have an account?
                         <span onClick={() => setOnLogin(true)}> Register Now</span>
                     </p>
@@ -77,8 +87,8 @@ export default function Login({setIsLogin}) {
            </div>
            <div className="register create-note" style={style}>
            <h2>Register</h2>
-                <form onSubmit={registerSubmit}>
-                    <input type="text" name="name" id="register-name"
+                <form onSubmit={handleRegisterSubmit}>
+                    <input type="text" name="username" id="register-name"
                     placeholder="User Name" required value={user.name}
                     onChange={onChangeInput} />
 
@@ -92,7 +102,7 @@ export default function Login({setIsLogin}) {
 
                     <button type="submit">Register</button>
                     <p>You have an account?
-                        <span onClick={() => setOnLogin(false)}> Login Now</span>
+                        <span > Login Now</span>
                     </p>
                     <h3>{err}</h3>
                 </form>

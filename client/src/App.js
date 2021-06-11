@@ -2,12 +2,13 @@ import axios from 'axios'
 import Login from './components/Login'
 import Notes from './components/Notes'
 import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 
 
 
 function App() {
 const [isLogin, setIsLogin] = useState(false)
-
+const auth = useSelector(state => state.auth)
 useEffect(() =>{
   const checkLogin = async ()=> {
     const token = localStorage.getItem('tokenStore')
@@ -28,7 +29,7 @@ if(verified.data === false) return localStorage.clear()
   return (
     <div className="App">
       { 
-      isLogin 
+      auth.isAuth 
       ?  <Notes setIsLogin ={setIsLogin}/>
        : <Login setIsLogin ={setIsLogin}/>
       }
